@@ -1,0 +1,98 @@
+<view class="container">
+  <view class="header">
+    <text class="title">卡证识别</text>
+    <text class="subtitle">支持身份证和银行卡识别</text>
+  </view>
+
+  <view class="card-type-selector">
+    <view class="type-item {{cardType === 'idCard' ? 'active' : ''}}" bindtap="selectCardType" data-type="idCard">
+      <view class="icon">🪪</view>
+      <text class="type-name">身份证识别</text>
+    </view>
+    <view class="type-item {{cardType === 'bankCard' ? 'active' : ''}}" bindtap="selectCardType" data-type="bankCard">
+      <view class="icon">💳</view>
+      <text class="type-name">银行卡识别</text>
+    </view>
+  </view>
+
+  <view class="image-container">
+    <view class="upload-area" wx:if="{{!imagePath}}" bindtap="chooseImage">
+      <view class="upload-icon">📷</view>
+      <text class="upload-text">点击选择图片</text>
+      <text class="upload-tip">支持拍照或从相册选择</text>
+    </view>
+    <view class="preview-area" wx:else>
+      <image class="preview-image" src="{{imagePath}}" mode="aspectFit"></image>
+      <view class="image-actions">
+        <button class="action-btn" bindtap="chooseImage" size="mini">重新选择</button>
+        <button class="action-btn primary" bindtap="recognizeCard" size="mini" loading="{{loading}}">
+          {{loading ? '识别中...' : '开始识别'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <view class="result-container" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">识别结果</text>
+    </view>
+    <view class="result-content">
+      <!-- 身份证识别结果 -->
+      <block wx:if="{{cardType === 'idCard'}}">
+        <view class="result-item" wx:if="{{result.Name}}">
+          <text class="label">姓名：</text>
+          <text class="value">{{result.Name}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.Sex}}">
+          <text class="label">性别：</text>
+          <text class="value">{{result.Sex}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.Nation}}">
+          <text class="label">民族：</text>
+          <text class="value">{{result.Nation}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.Birth}}">
+          <text class="label">出生日期：</text>
+          <text class="value">{{result.Birth}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.Address}}">
+          <text class="label">住址：</text>
+          <text class="value">{{result.Address}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.IdNum}}">
+          <text class="label">身份证号：</text>
+          <text class="value">{{result.IdNum}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.Authority}}">
+          <text class="label">签发机关：</text>
+          <text class="value">{{result.Authority}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.ValidDate}}">
+          <text class="label">有效期限：</text>
+          <text class="value">{{result.ValidDate}}</text>
+        </view>
+      </block>
+
+      <!-- 银行卡识别结果 -->
+      <block wx:if="{{cardType === 'bankCard'}}">
+        <view class="result-item" wx:if="{{result.CardNo}}">
+          <text class="label">卡号：</text>
+          <text class="value">{{result.CardNo}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.BankInfo}}">
+          <text class="label">银行名称：</text>
+          <text class="value">{{result.BankInfo}}</text>
+        </view>
+        <view class="result-item" wx:if="{{result.ValidDate}}">
+          <text class="label">有效期：</text>
+          <text class="value">{{result.ValidDate}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="error-container" wx:if="{{error}}">
+    <view class="error-icon">⚠️</view>
+    <text class="error-text">{{error}}</text>
+  </view>
+</view>
